@@ -1,4 +1,3 @@
-
 import { CellType } from "@common/enums";
 import {
   CoordinatesKey,

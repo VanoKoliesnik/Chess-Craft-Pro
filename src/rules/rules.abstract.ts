@@ -1,4 +1,3 @@
-
 import { Coordinates } from "@common/shared";
 import {
   CoordinatesKey,

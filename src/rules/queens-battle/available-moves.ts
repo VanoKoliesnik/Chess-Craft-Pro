@@ -1,4 +1,3 @@
-
 import { CellType } from "@common/enums";
 import { Coordinates, DiagonalCoordinates } from "@common/shared";
 import { ICoordinate } from "@common/types";

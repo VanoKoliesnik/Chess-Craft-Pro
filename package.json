@@ -5,17 +5,30 @@
   "scripts": {
     "start": "ts-node ./src/index.ts",
     "format": "prettier --write .",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "prepare": "node ./scripts/setup-git-hooks"
   },
   "author": "",
   "license": "ISC",
   "description": "",
+  "lint-staged": {
+    "*.ts": [
+      "npm run format",
+      "npm run lint"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "devDependencies": {
     "@types/node": "^22.5.5",
     "@typescript-eslint/eslint-plugin": "^8.7.0",
     "eslint": "^8.57.1",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.30.0",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "tsconfig-paths": "^4.2.0",

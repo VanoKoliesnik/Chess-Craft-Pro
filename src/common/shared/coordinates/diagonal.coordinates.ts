@@ -2,7 +2,6 @@ import { ICoordinate } from "@common/types";
 
 import { Board } from "@entities";
 
-
 export class DiagonalCoordinates {
   static getPoints(initialCoordinates: ICoordinate): ICoordinate[] {
     return [
