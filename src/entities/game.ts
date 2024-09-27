@@ -1,4 +1,6 @@
-import { Board, Figure, Queen } from "@entities";
+import { UUID } from "node:crypto";
+
+import { DEFAULT_BOARD_SIZE } from "@common/constants";
 import { CellType, FigureColor } from "@common/enums";
 import {
   Constructable,
@@ -6,11 +8,10 @@ import {
   ISizeCoordinate,
   MoveFigureResult,
 } from "@common/types";
-import { RenderEngine } from "@engine";
-import { Player } from "./player";
-import { UUID } from "node:crypto";
 import { PlayersMap } from "@common/types/maps";
-import { DEFAULT_BOARD_SIZE } from "@common/constants";
+
+import { RenderEngine } from "@engine";
+import { Board, Figure, Player, Queen } from "@entities";
 import { Rules } from "@rules";
 
 interface IGameConfig {

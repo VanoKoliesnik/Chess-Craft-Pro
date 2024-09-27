@@ -1,6 +1,8 @@
+
 import { CellType } from "@common/enums";
 import { Coordinates, DiagonalCoordinates } from "@common/shared";
 import { ICoordinate } from "@common/types";
+
 import { Board, Cell } from "@entities";
 
 type Parameters = {

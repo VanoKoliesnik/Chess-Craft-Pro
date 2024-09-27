@@ -1,5 +1,6 @@
-import { Figure } from "@entities";
 import { DestinationCell, IResultSuccess, OriginCell } from "@common/types";
+
+import { Figure } from "@entities";
 
 export type X = number;
 export type Y = number;
@@ -9,7 +10,10 @@ export interface ICoordinate {
   y: Y;
 }
 
-export interface ISizeCoordinate extends ICoordinate {}
+export interface ISizeCoordinate {
+  x: X;
+  y: Y;
+}
 
 export interface IVectorSegment {
   zeroPoint: ICoordinate;

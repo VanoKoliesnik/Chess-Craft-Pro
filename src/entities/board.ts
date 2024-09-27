@@ -1,5 +1,7 @@
 import CliTable from "cli-table3";
 
+
+import { DEFAULT_BOARD_SIZE } from "@common/constants";
 import { CellType, Event, FigureMoveDirection } from "@common/enums";
 import { AppEventEmitter, Coordinates, EventEmitter } from "@common/shared";
 import {
@@ -9,11 +11,11 @@ import {
   X,
   Y,
 } from "@common/types";
-import { Figure, Cell } from "@entities";
-import { genKey, randomNumber } from "@common/utils";
 import { CellsMap, FiguresMap } from "@common/types/maps";
-import { DEFAULT_BOARD_SIZE } from "@common/constants";
+import { genKey, randomNumber } from "@common/utils";
+
 import { Rules } from "@rules";
+import { Cell, Figure } from "@entities";
 
 interface IBoardConfig {
   boardSize?: Partial<ISizeCoordinate>;

@@ -1,4 +1,4 @@
-import { Cell } from "@entities";
+
 import { Coordinates } from "@common/shared";
 import {
   CoordinatesKey,
@@ -6,6 +6,8 @@ import {
   ICoordinate,
   ISizeCoordinate,
 } from "@common/types";
+
+import { Cell } from "@entities";
 
 export abstract class Rules {
   protected readonly coordinates: Coordinates;

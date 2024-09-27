@@ -1,4 +1,4 @@
-import { Cell } from "@entities";
+
 import { CellType } from "@common/enums";
 import {
   CoordinatesKey,
@@ -9,7 +9,8 @@ import {
   X,
   Y,
 } from "@common/types";
-import { Board } from "@entities";
+
+import { Board, Cell } from "@entities";
 
 export interface IIsMoveForwardAvailableProps {
   cell: Cell;

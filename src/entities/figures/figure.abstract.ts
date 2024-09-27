@@ -1,5 +1,6 @@
-import { FigureColor, FigureMoveDirection, FigureType } from "@common/enums";
 import { randomUUID, UUID } from "node:crypto";
+
+import { FigureColor, FigureMoveDirection, FigureType } from "@common/enums";
 
 export abstract class Figure {
   readonly id: UUID;

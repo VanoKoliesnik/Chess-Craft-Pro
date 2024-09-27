@@ -1,6 +1,8 @@
+
 import { CellColor, CellType, Event } from "@common/enums";
 import { AppEventEmitter, Coordinates, EventEmitter } from "@common/shared";
 import { CoordinatesKey, ICoordinate } from "@common/types";
+
 import { Figure } from "@entities";
 
 export class Cell {

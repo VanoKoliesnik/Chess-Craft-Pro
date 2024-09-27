@@ -1,5 +1,6 @@
 import { ICoordinate } from "@common/types";
 import { pickRandomElement } from "@common/utils";
+
 import { Game, Player } from "@entities";
 import { QueensBattleRules } from "@rules";
 
@@ -37,11 +38,7 @@ function moveFigure() {
     process.exit();
   }
 
-  const {
-    success,
-    cells,
-    figure: dFigure,
-  } = game.moveFigure(coordinates, nextMoveCoordinates);
+  const { success } = game.moveFigure(coordinates, nextMoveCoordinates);
 
   if (success) {
     coordinates = nextMoveCoordinates;

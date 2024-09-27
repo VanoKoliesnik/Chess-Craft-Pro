@@ -1,6 +1,9 @@
 import { UUID, randomUUID } from "node:crypto";
+
 import { FiguresMap } from "@common/types/maps";
+
 import { Figure } from "@entities";
+
 
 export class Player {
   readonly id: UUID;
