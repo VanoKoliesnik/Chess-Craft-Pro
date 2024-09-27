@@ -1,7 +1,17 @@
+export enum Event {
+  AddFigureToBoard = "AddFigureToBoard",
+}
+
 export enum CellType {
   White = "White",
   Black = "Black",
   Blue = "Blue",
+}
+
+export enum CellColor {
+  White = "⬜",
+  Black = "⬛",
+  Blue = "🟦",
 }
 
 export enum FigureMoveDirection {
@@ -10,6 +20,11 @@ export enum FigureMoveDirection {
   Diagonal,
 }
 
-export enum Event {
-  AddFigureToBoard = "AddFigureToBoard",
+export enum FigureType {
+  Queen = "Queen",
+}
+
+export enum FigureColor {
+  White = "⬜",
+  Black = "⬛",
 }
