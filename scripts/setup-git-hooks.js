@@ -23,8 +23,6 @@ if [ $? -ne 0 ]; then
   echo "Tests failed. Aborting commit."
   exit 1
 fi
-
-git add .
 `;
 
 const commitMsgHook = `#!/bin/sh
