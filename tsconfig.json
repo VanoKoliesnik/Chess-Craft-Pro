@@ -6,29 +6,17 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "strictNullChecks": false,
     "baseUrl": ".",
     "paths": {
-      "@common/*": [
-        "src/common/*"
-      ],
-      "@entities": [
-        "src/entities/index.ts"
-      ],
-      "@rules": [
-        "src/rules/index.ts"
-      ],
-      "@engine": [
-        "src/engine/index.ts"
-      ]
-    },
+      "@common/*": ["src/common/*"],
+      "@entities": ["src/entities/index.ts"],
+      "@rules": ["src/rules/index.ts"],
+      "@engine": ["src/engine/index.ts"]
+    }
   },
   "ts-node": {
-    "require": [
-      "tsconfig-paths/register"
-    ]
+    "require": ["tsconfig-paths/register"]
   }
 }
