@@ -22,9 +22,9 @@ fi
 `;
 
 fs.writeFileSync(path.join(hooksDir, "pre-commit"), preCommitHook);
-fs.chmodSync(path.join(hooksDir, "pre-commit"), 0o755);
+fs.chmodSync(path.join(hooksDir, "pre-commit"), 755);
 
 fs.writeFileSync(path.join(hooksDir, "commit-msg"), commitMsgHook);
-fs.chmodSync(path.join(hooksDir, "commit-msg"), 0o755);
+fs.chmodSync(path.join(hooksDir, "commit-msg"), 755);
 
 console.log("Git hooks have been set up successfully.");
