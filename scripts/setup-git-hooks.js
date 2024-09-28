@@ -5,6 +5,7 @@ const hooksDir = path.join(process.cwd(), ".git", "hooks");
 
 const preCommitHook = `#!/bin/sh
 npx lint-staged
+npm test
 git add .
 `;
 
