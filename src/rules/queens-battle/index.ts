@@ -2,8 +2,8 @@ import { FigureType } from "@common/enums";
 import { ICoordinate, ISizeCoordinate } from "@common/types";
 
 import { Cell } from "@entities";
-import { Rules } from "@rules";
 
+import { Rules } from "../rules.abstract";
 import { QueensBattleRulesAvailableMoves } from "./available-moves";
 
 export class QueensBattleRules extends Rules {
