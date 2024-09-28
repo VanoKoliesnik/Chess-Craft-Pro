@@ -4,8 +4,26 @@ const path = require("path");
 const hooksDir = path.join(process.cwd(), ".git", "hooks");
 
 const preCommitHook = `#!/bin/sh
+
+# Check for staged files
+if git diff --cached --quiet; then
+  echo "No staged files to commit. Skipping tests."
+  exit 0
+fi
+
+# Run lint-staged and tests
 npx lint-staged
+if [ $? -ne 0 ]; then
+  echo "Linting failed. Aborting commit."
+  exit 1
+fi
+
 npm test
+if [ $? -ne 0 ]; then
+  echo "Tests failed. Aborting commit."
+  exit 1
+fi
+
 git add .
 `;
 
