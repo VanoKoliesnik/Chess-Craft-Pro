@@ -5,5 +5,11 @@
   "testMatch": ["**/*.test.ts"],
   "transform": {
     "^.+\\.ts$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@common/(.*)$": "<rootDir>/src/common/$1",
+    "^@entities$": "<rootDir>/src/entities/index.ts",
+    "^@rules$": "<rootDir>/src/rules/index.ts",
+    "^@engine$": "<rootDir>/src/engine/index.ts"
   }
 }
