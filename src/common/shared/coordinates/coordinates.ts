@@ -8,6 +8,7 @@ import {
   X,
   Y,
 } from "@common/types";
+import { genKey } from "@common/utils";
 
 import { Board, Cell } from "@entities";
 
@@ -15,10 +16,6 @@ export interface IIsMoveForwardAvailableProps {
   cell: Cell;
   row: Cell[];
   delta: ICoordinate;
-}
-
-interface IMoveConfig {
-  isMoveForwardAvailable: (props: IIsMoveForwardAvailableProps) => boolean;
 }
 
 export class Coordinates {
@@ -31,7 +28,7 @@ export class Coordinates {
   }
 
   static getKey({ x, y }: ICoordinate): CoordinatesKey {
-    return `${x}_${y}`;
+    return genKey(x, y) as CoordinatesKey;
   }
 
   static makeSetList(coordinates: ICoordinate[]): Set<CoordinatesKey> {
@@ -58,39 +55,6 @@ export class Coordinates {
         if (!pointsToExclude.has(Coordinates.getKey({ x, y }))) {
           points.push({ x, y });
         }
-      }
-    }
-
-    return points;
-  }
-
-  isAroundPoint(
-    coordinates: ICoordinate,
-    pointCoordinates: ICoordinate
-  ): boolean {
-    return this.getVerticalMoves(coordinates, 1)
-      .concat(this.getHorizontalMoves(coordinates, 1))
-      .concat(this.getDiagonalMoves(coordinates, 1))
-
-      .includes(pointCoordinates);
-  }
-
-  getNewHorizontalMoves(
-    zeroPoint: ICoordinate,
-    config: IMoveConfig
-  ): ICoordinate[] {
-    const { isMoveForwardAvailable } = config;
-
-    const points: ICoordinate[] = [];
-    const board = Board.getInstance();
-
-    const row: Cell[] = board.getRow(zeroPoint.y, [zeroPoint]);
-
-    for (const cell of row) {
-      const delta = Coordinates.deltaAbsolute(cell.coordinates, zeroPoint);
-
-      if (isMoveForwardAvailable({ cell, row, delta })) {
-        points.push(cell.coordinates);
       }
     }
 
@@ -125,6 +89,7 @@ export class Coordinates {
     );
   }
 
+  // todo: remove. It should be controlled by Rules
   getVerticalMoves(
     { x, y }: ICoordinate,
     limit: number,
@@ -188,6 +153,7 @@ export class Coordinates {
     return moves;
   }
 
+  // todo: remove. It should be controlled by Rules
   getHorizontalMoves(
     { x, y }: ICoordinate,
     limit: number,
@@ -251,6 +217,7 @@ export class Coordinates {
     return moves;
   }
 
+  // todo: remove. It should be controlled by Rules
   getDiagonalMoves(
     { x, y }: ICoordinate,
     limit: number,
