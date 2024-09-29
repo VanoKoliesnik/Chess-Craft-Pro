@@ -15,7 +15,11 @@ export class DiagonalCoordinates {
   static getUpperLeftPoints({ x, y }: ICoordinate): ICoordinate[] {
     const moves: ICoordinate[] = [];
 
-    for (let i = x - 1, j = y - 1; i >= 0 && j >= 0; i--, j--) {
+    for (
+      let i = x - 1, j = y - 1;
+      i >= Board.getInstance().minX && j >= Board.getInstance().minY;
+      i--, j--
+    ) {
       moves.push({ x: i, y: j });
     }
 
@@ -27,7 +31,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x - 1, j = y + 1;
-      i >= 0 && j <= Board.getInstance().maxX;
+      i >= Board.getInstance().minX && j <= Board.getInstance().maxY - 1;
       i--, j++
     ) {
       moves.push({ x: i, y: j });
@@ -41,7 +45,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x + 1, j = y - 1;
-      i <= Board.getInstance().maxY && j >= 0;
+      i <= Board.getInstance().maxY && j >= Board.getInstance().minY;
       i++, j--
     ) {
       moves.push({ x: i, y: j });
@@ -55,7 +59,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x + 1, j = y + 1;
-      i <= Board.getInstance().maxY && j <= Board.getInstance().maxX;
+      i <= Board.getInstance().maxX && j <= Board.getInstance().maxY - 1;
       i++, j++
     ) {
       moves.push({ x: i, y: j });
