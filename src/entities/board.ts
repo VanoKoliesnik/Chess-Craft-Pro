@@ -1,5 +1,3 @@
-import CliTable from "cli-table3";
-
 import { DEFAULT_BOARD_SIZE } from "@common/constants";
 import { CellType, Event, FigureMoveDirection } from "@common/enums";
 import { AppEventEmitter, Coordinates, EventEmitter } from "@common/shared";
@@ -212,32 +210,6 @@ export class Board {
     destinationCell.setFigure = figure;
 
     return { success: true, cells: [originCell, destinationCell], figure };
-  }
-
-  render(): string {
-    const table = new CliTable({
-      head: [
-        `   x\n-----\n y`,
-        ...Array.from({ length: this.cells[0].length }, (_, i) =>
-          String(i + 1)
-        ),
-      ],
-    });
-
-    this.__debug__highlightAllFiguresAvailableMoves();
-
-    for (const row of this.cells) {
-      table.push([
-        String(row[0].coordinates.y + 1),
-        ...row.map((cell) => {
-          return `${cell.color}${cell.color}${cell.color}\n${cell.color}${
-            cell.figure?.portrait || cell.color
-          }${cell.color}\n${cell.color}${cell.color}${cell.color}`;
-        }),
-      ]);
-    }
-
-    return table.toString();
   }
 
   private handleAddFigureToBoard(figure: Figure, cell: Cell) {

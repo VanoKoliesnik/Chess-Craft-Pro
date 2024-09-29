@@ -10,7 +10,7 @@ import {
 } from "@common/types";
 import { PlayersMap } from "@common/types/maps";
 
-import { RenderEngine } from "@engine";
+import { PainterEngine } from "@engine";
 import { Board, Figure, Player, Queen } from "@entities";
 import { Rules } from "@rules";
 
@@ -25,7 +25,6 @@ export class Game {
   private readonly players: PlayersMap = new Map();
 
   private readonly figuresPortraits = new Set(["🤩", "🤠"]).values();
-  private readonly renderEngine: RenderEngine;
   private readonly rules: Rules;
 
   constructor({ players, Rules }: IGameConfig) {
@@ -38,8 +37,7 @@ export class Game {
 
     this.setupFigures();
 
-    this.renderEngine = new RenderEngine(this.render.bind(this));
-    this.renderEngine.start();
+    new PainterEngine(this.rules);
   }
 
   getAvailableMoves(coordinate: ICoordinate): ICoordinate[] {
@@ -92,11 +90,5 @@ export class Game {
 
       cell.setFigure = new Queen(figurePortrait, FigureColor.Black);
     }
-  }
-
-  private render(): string {
-    return `${this.board.render()}
-
-    Figures on board: ${this.board.figuresOnBoard.size}`;
   }
 }

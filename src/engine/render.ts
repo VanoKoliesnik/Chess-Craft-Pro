@@ -5,6 +5,7 @@ export class RenderEngine {
 
   constructor(renderFn: () => string) {
     this.renderFn = renderFn;
+    this.start();
   }
 
   start(fps: number = 1) {

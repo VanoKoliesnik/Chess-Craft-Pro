@@ -1,3 +1,4 @@
+import { BOARD_COLUMN_NAMES, BOARD_ROW_NAMES } from "@common/constants";
 import { Coordinates } from "@common/shared";
 import {
   CoordinatesKey,
@@ -17,6 +18,8 @@ export abstract class Rules {
     this.coordinates = new Coordinates(x, y);
   }
 
+  abstract getAvailableMoves(cell: Cell): ICoordinate[];
+
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
     return this.getAvailableMovesSet(cell).has(
       `${destinationCoordinates.x}_${destinationCoordinates.y}`
@@ -31,5 +34,11 @@ export abstract class Rules {
     );
   }
 
-  abstract getAvailableMoves(cell: Cell): ICoordinate[];
+  getColumnsNames(): string[] {
+    return BOARD_COLUMN_NAMES;
+  }
+
+  getRowsNames(): string[] {
+    return BOARD_ROW_NAMES;
+  }
 }
