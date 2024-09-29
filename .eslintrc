@@ -56,6 +56,16 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off"
+      }
+    }
+  ],
   "settings": {
     "import/resolver": {
       "typescript": {}
