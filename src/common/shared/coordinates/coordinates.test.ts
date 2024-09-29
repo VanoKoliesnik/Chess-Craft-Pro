@@ -2,7 +2,7 @@ import { ICoordinate } from "@common/types";
 
 import { Coordinates } from "./coordinates";
 
-describe("Common::Shared::Cordinates", () => {
+describe("Common::Shared::Coordinates", () => {
   let genKeySpy: jest.SpyInstance;
   let getKeySpy: jest.SpyInstance;
   let makeSetListSpy: jest.SpyInstance;
