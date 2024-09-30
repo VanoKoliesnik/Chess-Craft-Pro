@@ -15,7 +15,6 @@ import { Board, Figure, Player, Queen } from "@entities";
 import { Rules } from "@rules";
 
 interface IGameConfig {
-  players: [Player, Player];
   Rules: Constructable<Rules, ISizeCoordinate>;
 }
 
@@ -27,15 +26,13 @@ export class Game {
   private readonly figuresPortraits = new Set(["🤩", "🤠"]).values();
   private readonly rules: Rules;
 
-  constructor({ players, Rules }: IGameConfig) {
-    players.forEach((player) => {
-      this.players.set(player.id, player);
-    });
-
+  constructor({ Rules }: IGameConfig) {
     this.rules = new Rules({ x: DEFAULT_BOARD_SIZE, y: DEFAULT_BOARD_SIZE });
     this.board = Board.getInstance({ rules: this.rules });
 
     this.setupFigures();
+
+    this.players = this.rules.spawnPlayers();
 
     new PainterEngine(this.rules);
   }

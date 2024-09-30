@@ -1,25 +1,19 @@
 import { UUID, randomUUID } from "node:crypto";
 
-import { FiguresMap } from "@common/types/maps";
+import { FigureColor } from "@common/enums";
 
-import { Figure } from "@entities";
+type PlayerConfig = {
+  figuresColor: FigureColor;
+};
 
 export class Player {
   readonly id: UUID;
 
-  readonly figures: FiguresMap = new Map();
+  readonly figuresColor: FigureColor;
 
-  constructor() {
+  constructor({ figuresColor }: PlayerConfig) {
     this.id = randomUUID();
-  }
 
-  addFigure(figure: Figure) {
-    this.figures.set(figure.id, figure);
-  }
-
-  addFigures(figures: Figure[]) {
-    for (const figure of figures) {
-      this.figures.set(figure.id, figure);
-    }
+    this.figuresColor = figuresColor;
   }
 }

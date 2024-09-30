@@ -1,7 +1,7 @@
-import { FigureType } from "@common/enums";
-import { ICoordinate, ISizeCoordinate } from "@common/types";
+import { FigureColor, FigureType } from "@common/enums";
+import { ICoordinate, ISizeCoordinate, PlayersMap } from "@common/types";
 
-import { Cell } from "@entities";
+import { Cell, Player } from "@entities";
 
 import { Rules } from "../rules.abstract";
 import { QueensBattleRulesAvailableMoves } from "./available-moves";
@@ -12,6 +12,8 @@ export class QueensBattleRules extends Rules {
   private readonly maxCellsToJumpOver: number;
   private readonly availableMoves: QueensBattleRulesAvailableMoves;
 
+  private readonly cellsToSpawnFigures: SetIterator<ICoordinate>;
+
   constructor(boardSize: ISizeCoordinate) {
     super(boardSize);
 
@@ -19,6 +21,21 @@ export class QueensBattleRules extends Rules {
     this.availableMoves = new QueensBattleRulesAvailableMoves({
       maxCellsToJumpOver: this.maxCellsToJumpOver,
     });
+
+    this.cellsToSpawnFigures = new Set([
+      { x: 3, y: 0 },
+      { x: 4, y: boardSize.y },
+    ]).values();
+  }
+
+  spawnPlayers(): PlayersMap {
+    const darthVader = new Player({ figuresColor: FigureColor.Black });
+    const lukeSkywalker = new Player({ figuresColor: FigureColor.White });
+
+    return new Map([
+      [darthVader.id, darthVader],
+      [lukeSkywalker.id, lukeSkywalker],
+    ]);
   }
 
   getCellAvailableMoves(cell: Cell): ICoordinate[] {

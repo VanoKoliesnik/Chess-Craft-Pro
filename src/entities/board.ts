@@ -26,7 +26,6 @@ export class Board {
   readonly occupiedCells: CellsMap = new Map();
 
   private readonly cells: Cell[][] = [];
-  private readonly coordinates: Coordinates;
 
   private static instance: Board;
 
@@ -39,8 +38,6 @@ export class Board {
 
     this.columnsCount = boardSize?.x || DEFAULT_BOARD_SIZE;
     this.rowsCount = boardSize?.y || DEFAULT_BOARD_SIZE;
-
-    this.coordinates = new Coordinates(this.maxX, this.maxY);
 
     for (let y = 0; y < this.columnsCount; y++) {
       this.cells[y] = [];

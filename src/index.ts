@@ -1,14 +1,10 @@
 import { ICoordinate } from "@common/types";
 import { pickRandomElement } from "@common/utils";
 
-import { Game, Player } from "@entities";
+import { Game } from "@entities";
 import { QueensBattleRules } from "@rules";
 
-const playerBob = new Player();
-const playerAlice = new Player();
-
 const game = new Game({
-  players: [playerBob, playerAlice],
   Rules: QueensBattleRules,
 });
 

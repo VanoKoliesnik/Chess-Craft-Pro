@@ -5,6 +5,7 @@ import {
   CoordinatesSet,
   ICoordinate,
   ISizeCoordinate,
+  PlayersMap,
 } from "@common/types";
 
 import { Cell } from "@entities";
@@ -18,6 +19,8 @@ export abstract class Rules {
     this.coordinates = new Coordinates(x, y);
   }
 
+  abstract spawnPlayers(): PlayersMap;
+  // abstract spawnFigures(players: PlayersMap): void; // todo: implement
   abstract getCellAvailableMoves(cell: Cell): ICoordinate[];
 
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
