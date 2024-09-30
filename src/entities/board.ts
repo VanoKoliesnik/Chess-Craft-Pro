@@ -48,7 +48,7 @@ export class Board {
     }
 
     this.eventEmitter.on(
-      Event.AddFigureToBoard,
+      Event.SetFigureOnCell,
       this.handleAddFigureToBoard.bind(this)
     );
   }
@@ -189,7 +189,7 @@ export class Board {
 
     const destinationCell = this.getCell(destinationCoordinates);
 
-    if (!destinationCell.canAcceptFigure) {
+    if (!this.rules.checkIfCanAcceptFigure(destinationCell)) {
       return {
         success: false,
         cells: [originCell, destinationCell],

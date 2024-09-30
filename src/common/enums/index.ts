@@ -1,5 +1,5 @@
 export enum Event {
-  AddFigureToBoard = "AddFigureToBoard",
+  SetFigureOnCell = "AddFigureToBoard",
 }
 
 export enum CellType {

@@ -117,7 +117,7 @@ export class Coordinates {
         break;
       }
 
-      if (cell && cell.getType !== CellType.Black) {
+      if (cell && cell.type !== CellType.Black) {
         moves.push({ x, y: result.y });
       } else {
         cellsToJumpOver++;
@@ -139,7 +139,7 @@ export class Coordinates {
         break;
       }
 
-      if (cell && cell.getType !== CellType.Black) {
+      if (cell && cell.type !== CellType.Black) {
         moves.push({ x, y: result.y });
       } else {
         cellsToJumpOver++;
@@ -181,7 +181,7 @@ export class Coordinates {
         break;
       }
 
-      if (cell && cell.getType !== CellType.Black) {
+      if (cell && cell.type !== CellType.Black) {
         moves.push({ x: result.x, y });
       } else {
         cellsToJumpOver++;
@@ -203,7 +203,7 @@ export class Coordinates {
         break;
       }
 
-      if (cell && cell.getType !== CellType.Black) {
+      if (cell && cell.type !== CellType.Black) {
         moves.push({ x: result.x, y });
       } else {
         cellsToJumpOver++;
@@ -251,7 +251,7 @@ export class Coordinates {
       if (upRight.success) {
         if (
           upRightCell &&
-          upRightCell.getType !== CellType.Black &&
+          upRightCell.type !== CellType.Black &&
           cellsToJumpOverUpRight <= safeMaxCellsJump
         ) {
           moves.push(upRight);
@@ -263,7 +263,7 @@ export class Coordinates {
       if (upLeft.success) {
         if (
           upLeftCell &&
-          upLeftCell.getType !== CellType.Black &&
+          upLeftCell.type !== CellType.Black &&
           cellsToJumpOverUpLeft <= safeMaxCellsJump
         ) {
           moves.push(upLeft);
@@ -275,7 +275,7 @@ export class Coordinates {
       if (downRight.success) {
         if (
           downRightCell &&
-          downRightCell.getType !== CellType.Black &&
+          downRightCell.type !== CellType.Black &&
           cellsToJumpOverDownRight <= safeMaxCellsJump
         ) {
           moves.push(downRight);
@@ -287,7 +287,7 @@ export class Coordinates {
       if (downLeft.success) {
         if (
           downLeftCell &&
-          downLeftCell.getType !== CellType.Black &&
+          downLeftCell.type !== CellType.Black &&
           cellsToJumpOverDownLeft <= safeMaxCellsJump
         ) {
           moves.push(downLeft);

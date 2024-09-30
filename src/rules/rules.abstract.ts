@@ -22,6 +22,7 @@ export abstract class Rules {
   abstract spawnPlayers(): PlayersMap;
   // abstract spawnFigures(players: PlayersMap): void; // todo: implement
   abstract getCellAvailableMoves(cell: Cell): ICoordinate[];
+  abstract checkIfCanAcceptFigure(cell: Cell): boolean;
 
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
     return this.getCellAvailableMovesSet(cell).has(

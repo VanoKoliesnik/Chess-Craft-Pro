@@ -1,6 +1,6 @@
 import { randomUUID, UUID } from "node:crypto";
 
-import { FigureColor, FigureMoveDirection, FigureType } from "@common/enums";
+import { FigureColor, FigureType } from "@common/enums";
 
 export abstract class Figure {
   readonly id: UUID;
@@ -9,8 +9,6 @@ export abstract class Figure {
   readonly color: FigureColor;
 
   abstract readonly type: FigureType;
-  abstract readonly maxDistance: number;
-  abstract readonly moves: FigureMoveDirection[];
 
   constructor(portrait: string, color: FigureColor) {
     this.id = randomUUID();

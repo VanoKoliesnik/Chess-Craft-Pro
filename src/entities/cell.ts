@@ -5,9 +5,9 @@ import { CoordinatesKey, ICoordinate } from "@common/types";
 import { Figure } from "@entities";
 
 export class Cell {
-  figure: Figure = null;
+  figure: Figure;
 
-  private type: CellType;
+  type: CellType;
 
   readonly coordinates: ICoordinate;
 
@@ -19,17 +19,7 @@ export class Cell {
     this.coordinates = coordinates;
     this.type = type;
 
-    if (figure) {
-      this.figure = figure;
-    }
-  }
-
-  get getType(): CellType {
-    return this.type;
-  }
-
-  get canAcceptFigure(): boolean {
-    return !this.isEmpty || this.getType !== CellType.Black;
+    this.figure = figure || null;
   }
 
   get isEmpty(): boolean {
@@ -57,14 +47,14 @@ export class Cell {
   }
 
   set setFigure(figure: Figure) {
-    this.eventEmitter.emit(Event.AddFigureToBoard, figure, this);
+    this.figure = figure || null;
 
-    if (figure) {
+    if (this.isEmpty) {
       this.type = CellType.Black;
     } else {
       this.type = CellType.White;
-    }
 
-    this.figure = figure;
+      this.eventEmitter.emit(Event.SetFigureOnCell, figure, this);
+    }
   }
 }

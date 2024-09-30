@@ -93,7 +93,7 @@ export class QueensBattleRulesAvailableMoves {
     const row: Cell[] = Board.getInstance().getCells(possibleCoordinatesToMove);
 
     for (const cell of row) {
-      if (cell.getType === CellType.Black) {
+      if (cell.type === CellType.Black) {
         cellsToJumpOver++;
         continue;
       }

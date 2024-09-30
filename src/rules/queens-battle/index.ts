@@ -1,4 +1,4 @@
-import { FigureColor, FigureType } from "@common/enums";
+import { CellType, FigureColor, FigureType } from "@common/enums";
 import { ICoordinate, ISizeCoordinate, PlayersMap } from "@common/types";
 
 import { Cell, Player } from "@entities";
@@ -36,6 +36,10 @@ export class QueensBattleRules extends Rules {
       [darthVader.id, darthVader],
       [lukeSkywalker.id, lukeSkywalker],
     ]);
+  }
+
+  checkIfCanAcceptFigure(cell: Cell): boolean {
+    return cell.isEmpty && cell.type !== CellType.Black;
   }
 
   getCellAvailableMoves(cell: Cell): ICoordinate[] {
