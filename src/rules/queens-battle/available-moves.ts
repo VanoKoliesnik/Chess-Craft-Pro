@@ -102,6 +102,8 @@ export class QueensBattleRulesAvailableMoves {
         continue;
       }
 
+      cellsToJumpOver = 0;
+
       availableToMoveCoordinates.push(cell.coordinates);
     }
 

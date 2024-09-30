@@ -31,7 +31,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x - 1, j = y + 1;
-      i >= Board.getInstance().minX && j <= Board.getInstance().maxY - 1;
+      i >= Board.getInstance().minX && j <= Board.getInstance().maxY;
       i--, j++
     ) {
       moves.push({ x: i, y: j });
@@ -59,7 +59,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x + 1, j = y + 1;
-      i <= Board.getInstance().maxX && j <= Board.getInstance().maxY - 1;
+      i <= Board.getInstance().maxX && j <= Board.getInstance().maxY;
       i++, j++
     ) {
       moves.push({ x: i, y: j });

@@ -1,5 +1,5 @@
 import { DEFAULT_BOARD_SIZE } from "@common/constants";
-import { CellType, Event, FigureMoveDirection } from "@common/enums";
+import { CellType, Event } from "@common/enums";
 import { AppEventEmitter, Coordinates, EventEmitter } from "@common/shared";
 import {
   ICoordinate,
@@ -222,7 +222,7 @@ export class Board {
     }
   }
 
-  private iterateThroughBoard(
+  iterateThroughBoard(
     callback: (cell: Cell) => void,
     onCellBreakCallback?: (cell: Cell) => boolean,
     onRowBreakCallback?: (cells: Cell[]) => boolean
@@ -239,103 +239,6 @@ export class Board {
       if (onRowBreakCallback && onRowBreakCallback(rows)) {
         break;
       }
-    }
-  }
-
-  __debug__highlightAllFiguresAvailableMoves(): void {
-    this.iterateThroughBoard((cell: Cell) => {
-      cell.setType = CellType.White;
-    });
-
-    this.occupiedCells.forEach(({ coordinates }) => {
-      this.__debug__highlightAvailableMoves(coordinates);
-    });
-  }
-
-  __debug__highlightAvailableMoves(coordinates: ICoordinate): void {
-    const cell = this.getCell(coordinates);
-
-    if (cell.isEmpty) {
-      return;
-    }
-
-    for (const moveType of cell.figure.moves) {
-      const coordinates = cell.coordinates;
-      switch (moveType) {
-        case FigureMoveDirection.Horizontal:
-          this.__debug__highlightAvailableHorizontalMoves(
-            coordinates.x,
-            coordinates.y
-          );
-          break;
-
-        case FigureMoveDirection.Vertical:
-          this.__debug__highlightAvailableVerticalMoves(
-            coordinates.x,
-            coordinates.y
-          );
-          break;
-
-        case FigureMoveDirection.Diagonal:
-          this.__debug__highlightAvailableDiagonalMoves(
-            coordinates.x,
-            coordinates.y
-          );
-          break;
-
-        default:
-          break;
-      }
-    }
-  }
-
-  __debug__highlightAvailableHorizontalMoves(x: X, y: Y): void {
-    const horizontalCoordinatesToHighlight = this.rules.getAvailableMoves(
-      this.getCell({ x, y })
-    );
-
-    const cellsToHighlight: Cell[] = this.getCells(
-      horizontalCoordinatesToHighlight
-    ).filter(Boolean);
-
-    for (const cell of cellsToHighlight) {
-      cell.setType = CellType.Blue;
-    }
-  }
-
-  __debug__highlightAvailableVerticalMoves(x: X, y: Y): void {
-    const verticalCoordinatesToHighlight = this.coordinates.getVerticalMoves(
-      {
-        x,
-        y,
-      },
-      Infinity
-    );
-
-    const cellsToHighlight: Cell[] = this.getCells(
-      verticalCoordinatesToHighlight
-    ).filter(Boolean);
-
-    for (const cell of cellsToHighlight) {
-      cell.setType = CellType.Blue;
-    }
-  }
-
-  __debug__highlightAvailableDiagonalMoves(x: X, y: Y): void {
-    const diagonalCoordinatesToHighlight = this.coordinates.getDiagonalMoves(
-      {
-        x,
-        y,
-      },
-      Infinity
-    );
-
-    const cellsToHighlight: Cell[] = this.getCells(
-      diagonalCoordinatesToHighlight
-    ).filter(Boolean);
-
-    for (const cell of cellsToHighlight) {
-      cell.setType = CellType.Blue;
     }
   }
 }

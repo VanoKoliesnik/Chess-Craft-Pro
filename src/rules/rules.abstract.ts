@@ -18,17 +18,30 @@ export abstract class Rules {
     this.coordinates = new Coordinates(x, y);
   }
 
-  abstract getAvailableMoves(cell: Cell): ICoordinate[];
+  abstract getCellAvailableMoves(cell: Cell): ICoordinate[];
 
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
-    return this.getAvailableMovesSet(cell).has(
+    return this.getCellAvailableMovesSet(cell).has(
       `${destinationCoordinates.x}_${destinationCoordinates.y}`
     );
   }
 
-  getAvailableMovesSet(cell: Cell): CoordinatesSet {
+  getCellsAvailableMoves(cells: Cell[]): Map<CoordinatesKey, ICoordinate[]> {
+    const cellsAvailableMoves = new Map<CoordinatesKey, ICoordinate[]>();
+
+    for (const cell of cells) {
+      cellsAvailableMoves.set(
+        Coordinates.getKey(cell.coordinates),
+        this.getCellAvailableMoves(cell)
+      );
+    }
+
+    return cellsAvailableMoves;
+  }
+
+  getCellAvailableMovesSet(cell: Cell): CoordinatesSet {
     return new Set(
-      this.getAvailableMoves(cell).map(
+      this.getCellAvailableMoves(cell).map(
         ({ x, y }): CoordinatesKey => `${x}_${y}`
       )
     );

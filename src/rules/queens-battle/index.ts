@@ -21,7 +21,7 @@ export class QueensBattleRules extends Rules {
     });
   }
 
-  getAvailableMoves(cell: Cell): ICoordinate[] {
+  getCellAvailableMoves(cell: Cell): ICoordinate[] {
     if (!cell.figure) {
       return [];
     }

@@ -3,21 +3,29 @@ import CliTable from "cli-table3";
 import { Board } from "@entities";
 import { Rules } from "@rules";
 
+import { DebugEngine } from "./debug";
 import { RenderEngine } from "./render";
 
 export class PainterEngine {
   private readonly board: Board;
   private readonly rules: Rules;
+  private readonly debugEngine: DebugEngine;
 
   constructor(rules: Rules) {
     this.board = Board.getInstance();
     this.rules = rules;
+    this.debugEngine = new DebugEngine(this.rules);
 
     new RenderEngine(this.draw.bind(this));
   }
 
   private draw(): string {
-    return `${this.drawBoard()}\n${this.drawStatistics()}`;
+    this.debugEngine.highlightAvailableMoves();
+
+    return `
+    ${this.drawBoard()}
+
+    ${this.drawStatistics()}`;
   }
 
   private drawBoard(): string {

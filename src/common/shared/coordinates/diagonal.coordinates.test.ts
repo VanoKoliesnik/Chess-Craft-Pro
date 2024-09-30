@@ -52,6 +52,7 @@ describe("Common::Shared::DiagonalCoordinates", () => {
         { x: 4, y: 4 },
         { x: 5, y: 5 },
         { x: 6, y: 6 },
+        { x: 7, y: 7 },
       ]);
       expect(upperLeftSpy).toHaveBeenCalledTimes(1);
       expect(lowerLeftSpy).toHaveBeenCalledTimes(1);
@@ -106,6 +107,7 @@ describe("Common::Shared::DiagonalCoordinates", () => {
         { x: 4, y: 4 },
         { x: 5, y: 5 },
         { x: 6, y: 6 },
+        { x: 7, y: 7 },
       ]);
     });
   });

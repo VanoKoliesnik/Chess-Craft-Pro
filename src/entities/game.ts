@@ -41,7 +41,7 @@ export class Game {
   }
 
   getAvailableMoves(coordinate: ICoordinate): ICoordinate[] {
-    return this.rules.getAvailableMoves(this.board.getCell(coordinate));
+    return this.rules.getCellAvailableMoves(this.board.getCell(coordinate));
   }
 
   getPlayer(id: UUID): Player {
