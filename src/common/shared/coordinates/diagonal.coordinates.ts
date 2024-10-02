@@ -1,6 +1,6 @@
 import { ICoordinate } from "@common/types";
 
-import { Board } from "@entities";
+import { Holocron } from "@entities";
 
 export class DiagonalCoordinates {
   static getPoints(initialCoordinates: ICoordinate): ICoordinate[] {
@@ -17,7 +17,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x - 1, j = y - 1;
-      i >= Board.getInstance().minX && j >= Board.getInstance().minY;
+      i >= Holocron.getInstance().minX && j >= Holocron.getInstance().minY;
       i--, j--
     ) {
       moves.push({ x: i, y: j });
@@ -31,7 +31,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x - 1, j = y + 1;
-      i >= Board.getInstance().minX && j <= Board.getInstance().maxY;
+      i >= Holocron.getInstance().minX && j <= Holocron.getInstance().maxY;
       i--, j++
     ) {
       moves.push({ x: i, y: j });
@@ -45,7 +45,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x + 1, j = y - 1;
-      i <= Board.getInstance().maxY && j >= Board.getInstance().minY;
+      i <= Holocron.getInstance().maxY && j >= Holocron.getInstance().minY;
       i++, j--
     ) {
       moves.push({ x: i, y: j });
@@ -59,7 +59,7 @@ export class DiagonalCoordinates {
 
     for (
       let i = x + 1, j = y + 1;
-      i <= Board.getInstance().maxX && j <= Board.getInstance().maxY;
+      i <= Holocron.getInstance().maxX && j <= Holocron.getInstance().maxY;
       i++, j++
     ) {
       moves.push({ x: i, y: j });

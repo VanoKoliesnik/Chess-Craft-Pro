@@ -2,7 +2,7 @@ import { CellType } from "@common/enums";
 import { Coordinates, DiagonalCoordinates } from "@common/shared";
 import { ICoordinate } from "@common/types";
 
-import { Board, Cell } from "@entities";
+import { Cell, Holocron } from "@entities";
 
 type Parameters = {
   maxCellsToJumpOver: number;
@@ -28,7 +28,7 @@ export class QueensBattleRulesAvailableMoves {
     const coordinatesToRight = Coordinates.makeMatrix(
       initialCoordinates,
       {
-        x: Board.getInstance().maxX,
+        x: Holocron.getInstance().maxX,
         y: initialCoordinates.y,
       },
       [initialCoordinates]
@@ -52,7 +52,7 @@ export class QueensBattleRulesAvailableMoves {
     const coordinatesToBottom = Coordinates.makeMatrix(
       initialCoordinates,
       {
-        y: Board.getInstance().maxY,
+        y: Holocron.getInstance().maxY,
         x: initialCoordinates.x,
       },
       [initialCoordinates]
@@ -90,7 +90,9 @@ export class QueensBattleRulesAvailableMoves {
 
     const availableToMoveCoordinates: ICoordinate[] = [];
 
-    const row: Cell[] = Board.getInstance().getCells(possibleCoordinatesToMove);
+    const row: Cell[] = Holocron.getInstance().getCells({
+      coordinates: possibleCoordinatesToMove,
+    });
 
     for (const cell of row) {
       if (cell.type === CellType.Black) {

@@ -1,6 +1,6 @@
 import { CellType } from "@common/enums";
 
-import { Board, Cell } from "@entities";
+import { Cell, Holocron } from "@entities";
 import { Rules } from "@rules";
 
 export class DebugEngine {
@@ -11,20 +11,22 @@ export class DebugEngine {
   }
 
   highlightAvailableMoves(): void {
-    const board = Board.getInstance();
+    const holocron = Holocron.getInstance();
 
-    board.iterateThroughBoard((cell: Cell) => {
-      cell.setType = CellType.White;
+    holocron.iterateBoard({
+      cellCallback: (cell: Cell) => {
+        cell.setType = CellType.White;
+      },
     });
 
     const availableMoves = this.rules.getCellsAvailableMoves(
-      Array.from(board.occupiedCells.values())
+      holocron.occupiedCells
     );
 
     const cellsToHighlight: Cell[] = [];
 
     for (const [, coordinates] of availableMoves) {
-      cellsToHighlight.push(...board.getCells(coordinates));
+      cellsToHighlight.push(...holocron.getCells({ coordinates }));
     }
 
     for (const cell of cellsToHighlight) {

@@ -1,7 +1,8 @@
 import { CellType, FigureColor, FigureType } from "@common/enums";
-import { ICoordinate, ISizeCoordinate, PlayersMap } from "@common/types";
+import { NotFoundError } from "@common/errors";
+import { ICoordinate } from "@common/types";
 
-import { Cell, Player } from "@entities";
+import { Cell, Holocron, Player, Queen } from "@entities";
 
 import { Rules } from "../rules.abstract";
 import { QueensBattleRulesAvailableMoves } from "./available-moves";
@@ -9,33 +10,66 @@ import { QueensBattleRulesAvailableMoves } from "./available-moves";
 export class QueensBattleRules extends Rules {
   readonly name = "Queens Battle";
 
+  private cellsToSpawnFigures: SetIterator<ICoordinate>;
+
   private readonly maxCellsToJumpOver: number;
   private readonly availableMoves: QueensBattleRulesAvailableMoves;
+  private readonly figuresPortraits = new Set(["🤴", "👸"]).values();
 
-  private readonly cellsToSpawnFigures: SetIterator<ICoordinate>;
-
-  constructor(boardSize: ISizeCoordinate) {
-    super(boardSize);
+  constructor() {
+    super();
 
     this.maxCellsToJumpOver = 1;
     this.availableMoves = new QueensBattleRulesAvailableMoves({
       maxCellsToJumpOver: this.maxCellsToJumpOver,
     });
-
-    this.cellsToSpawnFigures = new Set([
-      { x: 3, y: 0 },
-      { x: 4, y: boardSize.y },
-    ]).values();
   }
 
-  spawnPlayers(): PlayersMap {
-    const darthVader = new Player({ figuresColor: FigureColor.Black });
-    const lukeSkywalker = new Player({ figuresColor: FigureColor.White });
+  prepare(): void {
+    this.cellsToSpawnFigures = new Set([
+      { x: 3, y: 0 },
+      { x: 4, y: Holocron.getInstance().maxY },
+    ]).values();
 
-    return new Map([
-      [darthVader.id, darthVader],
-      [lukeSkywalker.id, lukeSkywalker],
-    ]);
+    this.spawnPlayers();
+    this.spawnFigures();
+  }
+
+  nextMove(): void {
+    // const availableMoves = this.getAvailableMoves(coordinates);
+    // if (!availableMoves.length) {
+    //   process.exit();
+    // }
+    // // const nextMoveCoordinates = coordinatesToMove.pop();
+    // const nextMoveCoordinates = pickRandomElement(availableMoves);
+    // if (!nextMoveCoordinates) {
+    //   process.exit();
+    // }
+    // const { success } = game.moveFigure(coordinates, nextMoveCoordinates);
+    // if (success) {
+    //   coordinates = nextMoveCoordinates;
+    // } else {
+    //   setTimeout(moveFigure, 100);
+    // }
+  }
+
+  spawnPlayers(): Player[] {
+    return [
+      new Player({ figuresColor: FigureColor.Black }),
+      new Player({ figuresColor: FigureColor.White }),
+    ];
+  }
+
+  spawnFigures(): void {
+    Holocron.getInstance().players.forEach((player) => {
+      const cellCoordinates = this.cellsToSpawnFigures.next().value;
+
+      if (!cellCoordinates) {
+        throw new NotFoundError(`next cellCoordinates not found`);
+      }
+
+      new Queen(this.figuresPortraits.next().value, player, cellCoordinates);
+    });
   }
 
   checkIfCanAcceptFigure(cell: Cell): boolean {
@@ -43,11 +77,11 @@ export class QueensBattleRules extends Rules {
   }
 
   getCellAvailableMoves(cell: Cell): ICoordinate[] {
-    if (!cell.figure) {
-      return [];
-    }
+    const figure = this.holocron.getFigureByCell({
+      coordinates: cell.coordinates,
+    });
 
-    if (cell.figure.type !== FigureType.Queen) {
+    if (!figure || figure.type !== FigureType.Queen) {
       return [];
     }
 

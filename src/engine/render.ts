@@ -1,16 +1,20 @@
 export class RenderEngine {
   private intervalId: NodeJS.Timeout = null;
-  private readonly renderFn: () => string;
   private prevFrame: string = null;
 
-  constructor(renderFn: () => string) {
-    this.renderFn = renderFn;
+  private readonly renderFrame: () => string;
+  private readonly updateState: () => void;
+
+  constructor(updateState: () => void, renderFrame: () => string) {
+    this.renderFrame = renderFrame;
+    this.updateState = updateState;
     this.start();
   }
 
   start(fps: number = 1) {
     this.intervalId = setInterval(() => {
-      const nextFrame = this.renderFn();
+      this.updateState();
+      const nextFrame = this.renderFrame();
 
       if (this.prevFrame === nextFrame) {
         return;

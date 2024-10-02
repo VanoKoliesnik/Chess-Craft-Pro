@@ -1,32 +1,35 @@
 import { BOARD_COLUMN_NAMES, BOARD_ROW_NAMES } from "@common/constants";
 import { Coordinates } from "@common/shared";
-import {
-  CoordinatesKey,
-  CoordinatesSet,
-  ICoordinate,
-  ISizeCoordinate,
-  PlayersMap,
-} from "@common/types";
+import { CoordinatesKey, CoordinatesSet, ICoordinate } from "@common/types";
 
-import { Cell } from "@entities";
+import { Cell, Holocron, Player } from "@entities";
 
 export abstract class Rules {
-  protected readonly coordinates: Coordinates;
+  protected readonly holocron: Holocron;
 
   abstract readonly name: string;
 
-  constructor({ x, y }: ISizeCoordinate) {
-    this.coordinates = new Coordinates(x, y);
-  }
+  abstract prepare(): void;
+  abstract nextMove(): void;
 
-  abstract spawnPlayers(): PlayersMap;
-  // abstract spawnFigures(players: PlayersMap): void; // todo: implement
+  abstract spawnPlayers(): Player[];
+  abstract spawnFigures(players: Player[]): void;
   abstract getCellAvailableMoves(cell: Cell): ICoordinate[];
   abstract checkIfCanAcceptFigure(cell: Cell): boolean;
+
+  constructor() {
+    this.holocron = Holocron.getInstance();
+  }
 
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
     return this.getCellAvailableMovesSet(cell).has(
       `${destinationCoordinates.x}_${destinationCoordinates.y}`
+    );
+  }
+
+  getAvailableMoves(coordinates: ICoordinate): ICoordinate[] {
+    return this.getCellAvailableMoves(
+      Holocron.getInstance().getCell({ coordinates })
     );
   }
 

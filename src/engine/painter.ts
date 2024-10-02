@@ -1,22 +1,22 @@
 import CliTable from "cli-table3";
 
-import { Board } from "@entities";
+import { Holocron } from "@entities";
 import { Rules } from "@rules";
 
 import { DebugEngine } from "./debug";
 import { RenderEngine } from "./render";
 
 export class PainterEngine {
-  private readonly board: Board;
   private readonly rules: Rules;
   private readonly debugEngine: DebugEngine;
+  private readonly holocron: Holocron;
 
   constructor(rules: Rules) {
-    this.board = Board.getInstance();
+    this.holocron = Holocron.getInstance();
     this.rules = rules;
     this.debugEngine = new DebugEngine(this.rules);
 
-    new RenderEngine(this.draw.bind(this));
+    new RenderEngine(this.rules.nextMove, this.draw.bind(this));
   }
 
   private draw(): string {
@@ -35,12 +35,16 @@ export class PainterEngine {
 
     const rowsNames = this.rules.getRowsNames();
 
-    for (const row of this.board.getBoard) {
+    for (const row of this.holocron.board) {
       table.push([
         rowsNames[row[0].coordinates.y],
         ...row.map((cell) => {
+          const figure = Holocron.getInstance().getFigureByCell({
+            coordinates: cell.coordinates,
+          });
+
           return `${cell.color}${cell.color}${cell.color}\n${cell.color}${
-            cell.figure?.portrait || cell.color
+            figure?.portrait || cell.color
           }${cell.color}\n${cell.color}${cell.color}${cell.color}`;
         }),
       ]);
@@ -49,7 +53,11 @@ export class PainterEngine {
     return table.toString();
   }
 
-  private drawStatistics(): string[] {
-    return [`Figures on board: ${this.board.figuresOnBoard.size}`];
+  private drawStatistics(): string {
+    return [
+      `Figures on board: ${this.holocron.occupiedCellsCount}`,
+      `Total figures count: ${this.holocron.figuresCount}`,
+      `Players: ${this.holocron.playersCount}`,
+    ].join("\n");
   }
 }

@@ -3,7 +3,7 @@ import { ICoordinate } from "@common/types";
 import { DiagonalCoordinates } from "./diagonal.coordinates";
 
 jest.mock("@entities", () => ({
-  Board: {
+  Holocron: {
     getInstance: jest.fn().mockReturnValue({
       minX: 0,
       minY: 0,

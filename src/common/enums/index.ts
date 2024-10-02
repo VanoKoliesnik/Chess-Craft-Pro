@@ -1,7 +1,3 @@
-export enum Event {
-  SetFigureOnCell = "AddFigureToBoard",
-}
-
 export enum CellType {
   White = "White",
   Black = "Black",

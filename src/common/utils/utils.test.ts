@@ -1,4 +1,4 @@
-import { createArray, genKey, pickRandomElement, randomNumber } from ".";
+import { createArray, genKey, isIn, pickRandomElement, randomNumber } from ".";
 
 describe("Common::Utils", () => {
   describe("createArray", () => {
@@ -105,6 +105,31 @@ describe("Common::Utils", () => {
       const result = pickRandomElement(elements);
 
       expect(result).toBe("onlyElement");
+    });
+  });
+
+  describe("isIn", () => {
+    it("should return true if the property exists in the object", () => {
+      const obj = { name: "R2D2", age: 30 };
+      expect(isIn(obj, "name")).toBe(true);
+      expect(isIn(obj, "age")).toBe(true);
+    });
+
+    it("should return false if the property does not exist in the object", () => {
+      const obj = { name: "C3PO", age: 30 };
+      // @ts-expect-error for test purpose
+      expect(isIn(obj, "height")).toBe(false);
+    });
+
+    it("should return false for undefined or null objects", () => {
+      expect(isIn(undefined as { name: string }, "name")).toBe(false);
+      expect(isIn(null as { name: string }, "name")).toBe(false);
+    });
+
+    it("should work with an empty object", () => {
+      const obj = {};
+      // @ts-expect-error for test purpose
+      expect(isIn(obj, "name")).toBe(false);
     });
   });
 });
