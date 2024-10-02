@@ -5,21 +5,17 @@ import { CoordinatesKey, CoordinatesSet, ICoordinate } from "@common/types";
 import { Cell, Holocron, Player } from "@entities";
 
 export abstract class Rules {
-  protected readonly holocron: Holocron;
-
   abstract readonly name: string;
 
   abstract prepare(): void;
   abstract nextMove(): void;
 
-  abstract spawnPlayers(): Player[];
+  abstract spawnPlayers(): void;
   abstract spawnFigures(players: Player[]): void;
   abstract getCellAvailableMoves(cell: Cell): ICoordinate[];
   abstract checkIfCanAcceptFigure(cell: Cell): boolean;
 
-  constructor() {
-    this.holocron = Holocron.getInstance();
-  }
+  constructor() {}
 
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
     return this.getCellAvailableMovesSet(cell).has(

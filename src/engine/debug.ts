@@ -15,7 +15,9 @@ export class DebugEngine {
 
     holocron.iterateBoard({
       cellCallback: (cell: Cell) => {
-        cell.setType = CellType.White;
+        if (cell.type !== CellType.Black) {
+          cell.setType = CellType.White;
+        }
       },
     });
 

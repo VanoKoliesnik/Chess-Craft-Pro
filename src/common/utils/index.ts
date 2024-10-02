@@ -4,8 +4,9 @@ export const createArray = <T>(length: number, defaultValue?: T): T[] =>
 export const randomNumber = (max = 10, min = 0): number =>
   Math.ceil(Math.random() * (max - min) + min);
 
-export const genKey = (...args: Array<string | number>): string =>
-  args.join("_");
+export const genKey = <T extends string = string>(
+  ...args: Array<string | number>
+): T => args.join("_") as T;
 
 export const parseKey = (key: string): string[] => key.split("_");
 

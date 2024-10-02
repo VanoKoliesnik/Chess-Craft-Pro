@@ -16,7 +16,10 @@ export class PainterEngine {
     this.rules = rules;
     this.debugEngine = new DebugEngine(this.rules);
 
-    new RenderEngine(this.rules.nextMove, this.draw.bind(this));
+    new RenderEngine(
+      this.rules.nextMove.bind(this.rules),
+      this.draw.bind(this)
+    );
   }
 
   private draw(): string {

@@ -8,17 +8,22 @@ import {
 } from "@common/shared";
 import {
   CoordinatesKey,
+  DestinationCell,
   EntitySearchArgsByCoordinates,
   EntitySearchArgsByMultipleCoordinates,
   ICoordinate,
+  IResultSuccess,
   ISizeCoordinate,
+  OriginCell,
 } from "@common/types";
 import { genKey, isIn } from "@common/utils";
 
 import { Cell, Figure, Player } from "@entities";
+import { Rules } from "@rules";
 
 type HolocronConfig = {
   boardSize: ISizeCoordinate;
+  rules: Rules;
 };
 
 type IterateThroughBoardArgs = {
@@ -39,19 +44,26 @@ export class Holocron {
   private readonly _players = new Map<Player["id"], Player>();
   private readonly _figures = new Map<Figure["id"], Figure>();
 
-  private readonly _cellToFigure = new Storage<Figure>();
-  private readonly _playerToFigure = new Storage<Figure>();
+  private readonly _cellToFigure = new Storage<Figure, CoordinatesKey>();
+  private readonly _figureToCell = new Storage<ICoordinate, Figure["id"]>();
+  private readonly _playerToFigure = new Storage<Figure, PlayerToFigureKey>();
+
+  private _activePlayer: Player["id"];
+  private _playerIterator: Generator<Player, Player>;
 
   private readonly eventEmitter: EventEmitter;
+  private readonly rules: Rules;
 
-  private constructor({ boardSize }: HolocronConfig) {
+  private constructor({ boardSize, rules }: HolocronConfig) {
     this.eventEmitter = AppEventEmitter.getInstance();
+    this.rules = rules;
 
     this._boardSize = boardSize;
 
     this.listenForEvents();
 
     this.initializeBoard();
+    this.updatePlayerIterator();
   }
 
   static getInstance(config?: HolocronConfig): Holocron {
@@ -98,14 +110,10 @@ export class Holocron {
     return board;
   }
 
-  get players(): Player[] {
-    return Array.from(this._players.values());
-  }
-
   get occupiedCells(): Cell[] {
     return this._cellToFigure
       .keys()
-      .map((coordinateKey) => this._cells.get(coordinateKey as CoordinatesKey));
+      .map((coordinateKey) => this._cells.get(coordinateKey));
   }
 
   get occupiedCellsCount(): number {
@@ -116,14 +124,28 @@ export class Holocron {
     return this._figures.size;
   }
 
+  get players(): Player[] {
+    return Array.from(this._players.values());
+  }
+
   get playersCount(): number {
     return this._players.size;
   }
 
-  *nextPlayer(): Generator<Player> {
-    for (const [, player] of this._players) {
-      yield player;
+  get activePlayer() {
+    return this._activePlayer;
+  }
+
+  nextPlayer(): Player {
+    if (!this._playerIterator) {
+      this.updatePlayerIterator();
     }
+
+    const nextPlayer = this._playerIterator.next().value;
+
+    this._activePlayer = nextPlayer.id;
+
+    return nextPlayer;
   }
 
   getCell({ coordinates }: EntitySearchArgsByCoordinates) {
@@ -150,6 +172,68 @@ export class Holocron {
 
   getFigureByCell({ coordinates }: EntitySearchArgsByCoordinates): Figure {
     return this._cellToFigure.get(Coordinates.getKey(coordinates)) || null;
+  }
+
+  getFiguresByPlayer(playerId: Player["id"]): Figure[] {
+    return this._playerToFigure.searchValues(new RegExp(playerId));
+  }
+
+  getFiguresOnBoardByPlayer(
+    playerId: Player["id"]
+  ): Map<Figure["id"], ICoordinate> {
+    const figures = this.getFiguresByPlayer(playerId);
+    const cellsWithFigures = new Map<Figure["id"], ICoordinate>();
+
+    for (const cell of this.occupiedCells) {
+      for (const figure of figures) {
+        const figureOnCell = this.getFigureByCell({
+          coordinates: cell.coordinates,
+        });
+
+        if (figureOnCell && figureOnCell.id === figure.id) {
+          cellsWithFigures.set(figure.id, cell.coordinates);
+        }
+      }
+    }
+
+    return cellsWithFigures;
+  }
+
+  moveFigure(
+    originCoordinates: ICoordinate,
+    destinationCoordinates: ICoordinate
+  ): {
+    cells: [OriginCell, DestinationCell];
+  } & IResultSuccess {
+    const originCell = this.getCell({ coordinates: originCoordinates });
+
+    if (originCell.isEmpty) {
+      return { success: false, cells: [originCell, null] };
+    }
+
+    const destinationCell = this.getCell({
+      coordinates: destinationCoordinates,
+    });
+
+    if (!this.rules.checkIfCanAcceptFigure(destinationCell)) {
+      return {
+        success: false,
+        cells: [originCell, destinationCell],
+      };
+    }
+
+    if (!this.rules.isMoveAvailable(originCell, destinationCoordinates)) {
+      return { success: false, cells: [originCell, destinationCell] };
+    }
+
+    const figure = this._cellToFigure.get(
+      Coordinates.getKey(originCoordinates)
+    );
+
+    this.setFigureOnCell(null, originCoordinates);
+    this.setFigureOnCell(figure, destinationCoordinates);
+
+    return { success: true, cells: [originCell, destinationCell] };
   }
 
   iterateBoard(args: IterateThroughBoardArgs): void {
@@ -183,32 +267,35 @@ export class Holocron {
 
   private addPlayer(player: Player): void {
     this._players.set(player.id, player);
+    this.updatePlayerIterator();
   }
 
   private addFigure(
     figure: Figure,
-    player: Player["id"],
-    cell?: ICoordinate
+    playerId: Player["id"],
+    cellCoordinate?: ICoordinate
   ): void {
     this._figures.set(figure.id, figure);
 
     this._playerToFigure.set(
-      this.getPlayerToFigureKey(player, figure.id),
+      this.getPlayerToFigureKey(playerId, figure.id),
       figure
     );
 
-    if (cell) {
-      this._cellToFigure.set(Coordinates.getKey(cell), figure);
+    if (cellCoordinate) {
+      this._cellToFigure.set(Coordinates.getKey(cellCoordinate), figure);
+      this._figureToCell.set(figure.id, cellCoordinate);
     }
   }
 
-  private setFigureOnCell(figure: Figure, cell: ICoordinate): void {
+  private setFigureOnCell(figure: Figure, cellCoordinates: ICoordinate): void {
     if (figure === null) {
-      this._cellToFigure.remove(Coordinates.getKey(cell));
+      this._cellToFigure.remove(Coordinates.getKey(cellCoordinates));
       return;
     }
 
-    this._cellToFigure.set(Coordinates.getKey(cell), figure);
+    this._cellToFigure.set(Coordinates.getKey(cellCoordinates), figure);
+    this._figureToCell.set(figure.id, cellCoordinates);
   }
 
   private listenForEvents() {
@@ -229,10 +316,22 @@ export class Holocron {
     }
   }
 
+  private updatePlayerIterator() {
+    this._playerIterator = this.createPlayersIterator();
+  }
+
+  private *createPlayersIterator(): Generator<Player> {
+    while (true) {
+      for (const player of this._players.values()) {
+        yield player;
+      }
+    }
+  }
+
   private getPlayerToFigureKey(
-    player: Player["id"],
-    figure: Figure["id"]
+    playerId: Player["id"],
+    figureId: Figure["id"]
   ): PlayerToFigureKey {
-    return genKey(player, figure) as PlayerToFigureKey;
+    return genKey<PlayerToFigureKey>(playerId, figureId);
   }
 }

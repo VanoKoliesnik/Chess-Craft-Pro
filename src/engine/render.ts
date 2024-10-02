@@ -11,7 +11,7 @@ export class RenderEngine {
     this.start();
   }
 
-  start(fps: number = 1) {
+  start(fps: number = 6) {
     this.intervalId = setInterval(() => {
       this.updateState();
       const nextFrame = this.renderFrame();

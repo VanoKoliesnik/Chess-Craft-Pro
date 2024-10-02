@@ -15,11 +15,12 @@ export class Game {
   private readonly rules: Rules;
 
   constructor({ Rules }: IGameConfig) {
+    this.rules = new Rules({ x: DEFAULT_BOARD_SIZE, y: DEFAULT_BOARD_SIZE });
+
     Holocron.getInstance({
       boardSize: { x: DEFAULT_BOARD_SIZE, y: DEFAULT_BOARD_SIZE },
+      rules: this.rules,
     });
-
-    this.rules = new Rules({ x: DEFAULT_BOARD_SIZE, y: DEFAULT_BOARD_SIZE });
 
     this.rules.prepare();
 

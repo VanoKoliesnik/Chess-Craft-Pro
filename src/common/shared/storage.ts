@@ -1,41 +1,35 @@
-export class Storage<T> {
-  private storage: { [key: string]: T } = {};
+type StorageObject<V, K extends string> = { [key in K]: V };
 
-  set(key: string, value: T): void {
+export class Storage<V, K extends string = string> {
+  private storage: StorageObject<V, K> = {} as StorageObject<V, K>;
+
+  set(key: K, value: V): void {
     this.storage[key] = value;
   }
 
-  get(key: string): T | undefined {
+  get(key: K): V | undefined {
     return this.storage[key];
   }
 
-  remove(key: string): void {
+  remove(key: K): void {
     delete this.storage[key];
   }
 
   clear(): void {
-    this.storage = {};
+    this.storage = {} as StorageObject<V, K>;
   }
 
-  values(): T[] {
-    return Object.values(this.storage);
-  }
-
-  entries(): { key: string; value: T }[] {
-    return Object.entries(this.storage).map(([key, value]) => ({ key, value }));
-  }
-
-  keys(): string[] {
-    return Object.keys(this.storage);
+  keys(): K[] {
+    return Object.keys(this.storage) as K[];
   }
 
   searchKeys(pattern: RegExp): string[] {
     return Object.keys(this.storage).filter((key) => pattern.test(key));
   }
 
-  searchValues(pattern: RegExp): { key: string; value: T }[] {
+  searchValues(pattern: RegExp): V[] {
     return Object.entries(this.storage)
       .filter(([key]) => pattern.test(key))
-      .map(([key, value]) => ({ key, value }));
+      .map(([, value]) => value as V);
   }
 }

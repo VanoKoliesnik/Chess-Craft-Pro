@@ -1,6 +1,7 @@
 import { CellType, FigureColor, FigureType } from "@common/enums";
 import { NotFoundError } from "@common/errors";
 import { ICoordinate } from "@common/types";
+import { pickRandomElement } from "@common/utils";
 
 import { Cell, Holocron, Player, Queen } from "@entities";
 
@@ -36,28 +37,42 @@ export class QueensBattleRules extends Rules {
   }
 
   nextMove(): void {
-    // const availableMoves = this.getAvailableMoves(coordinates);
-    // if (!availableMoves.length) {
-    //   process.exit();
-    // }
-    // // const nextMoveCoordinates = coordinatesToMove.pop();
-    // const nextMoveCoordinates = pickRandomElement(availableMoves);
-    // if (!nextMoveCoordinates) {
-    //   process.exit();
-    // }
-    // const { success } = game.moveFigure(coordinates, nextMoveCoordinates);
-    // if (success) {
-    //   coordinates = nextMoveCoordinates;
-    // } else {
-    //   setTimeout(moveFigure, 100);
-    // }
+    const player = Holocron.getInstance().nextPlayer();
+    const figureCoordinates = Holocron.getInstance()
+      .getFiguresOnBoardByPlayer(player.id)
+      .values()
+      .next().value;
+
+    const availableMoves = this.getAvailableMoves(figureCoordinates);
+
+    if (!availableMoves.length) {
+      process.exit();
+    }
+
+    const nextMoveCoordinates = pickRandomElement(availableMoves);
+
+    if (!nextMoveCoordinates) {
+      process.exit();
+    }
+
+    const {
+      success,
+      cells: [, destinationCell],
+    } = Holocron.getInstance().moveFigure(
+      figureCoordinates,
+      nextMoveCoordinates
+    );
+
+    if (success) {
+      destinationCell.setType = CellType.Black;
+    } else {
+      process.exit();
+    }
   }
 
-  spawnPlayers(): Player[] {
-    return [
-      new Player({ figuresColor: FigureColor.Black }),
-      new Player({ figuresColor: FigureColor.White }),
-    ];
+  spawnPlayers(): void {
+    new Player({ figuresColor: FigureColor.Black });
+    new Player({ figuresColor: FigureColor.White });
   }
 
   spawnFigures(): void {
@@ -77,7 +92,7 @@ export class QueensBattleRules extends Rules {
   }
 
   getCellAvailableMoves(cell: Cell): ICoordinate[] {
-    const figure = this.holocron.getFigureByCell({
+    const figure = Holocron.getInstance().getFigureByCell({
       coordinates: cell.coordinates,
     });
 

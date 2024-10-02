@@ -32,6 +32,7 @@ export class Cell {
     return CellColor[this.type];
   }
 
+  // todo: move this logic to rules
   set setType(nextType: CellType) {
     switch (this.type) {
       case CellType.White:
