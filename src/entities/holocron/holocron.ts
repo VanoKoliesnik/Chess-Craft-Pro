@@ -136,6 +136,10 @@ export class Holocron {
     return this._activePlayer;
   }
 
+  getPlayerById(playerId: Player["id"]): Player {
+    return this._players.get(playerId);
+  }
+
   nextPlayer(): Player {
     if (!this._playerIterator) {
       this.updatePlayerIterator();

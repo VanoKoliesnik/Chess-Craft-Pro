@@ -1,3 +1,4 @@
 export enum ErrorCode {
-  NotFound = 404,
+  Failure = 1,
+  NotFound = 2,
 }

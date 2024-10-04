@@ -4,31 +4,27 @@ import { Holocron } from "@entities";
 import { Rules } from "@rules";
 
 import { DebugEngine } from "./debug";
-import { RenderEngine } from "./render";
+
+type PainterConfig = {
+  rules: Rules;
+};
 
 export class PainterEngine {
   private readonly rules: Rules;
   private readonly debugEngine: DebugEngine;
   private readonly holocron: Holocron;
 
-  constructor(rules: Rules) {
+  constructor({ rules }: PainterConfig) {
     this.holocron = Holocron.getInstance();
     this.rules = rules;
-    this.debugEngine = new DebugEngine(this.rules);
-
-    new RenderEngine(
-      this.rules.nextMove.bind(this.rules),
-      this.draw.bind(this)
-    );
+    this.debugEngine = new DebugEngine({ rules });
   }
 
-  private draw(): string {
-    this.debugEngine.highlightAvailableMoves();
-
+  draw(): string {
     return `
-    ${this.drawBoard()}
+${this.drawBoard()}
 
-    ${this.drawStatistics()}`;
+${this.rules.drawStatistics()}`;
   }
 
   private drawBoard(): string {
@@ -54,13 +50,5 @@ export class PainterEngine {
     }
 
     return table.toString();
-  }
-
-  private drawStatistics(): string {
-    return [
-      `Figures on board: ${this.holocron.occupiedCellsCount}`,
-      `Total figures count: ${this.holocron.figuresCount}`,
-      `Players: ${this.holocron.playersCount}`,
-    ].join("\n");
   }
 }

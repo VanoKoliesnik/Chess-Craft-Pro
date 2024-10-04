@@ -23,4 +23,5 @@ export enum FigureType {
 export enum FigureColor {
   White = "⬜",
   Black = "⬛",
+  Blue = "🟦",
 }

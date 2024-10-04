@@ -1,7 +1,7 @@
 import { DEFAULT_BOARD_SIZE } from "@common/constants";
 import { Constructable, ISizeCoordinate } from "@common/types";
 
-import { PainterEngine } from "@engine";
+import { Engine } from "@engine";
 import { Holocron, Player } from "@entities";
 import { Rules } from "@rules";
 
@@ -24,7 +24,10 @@ export class Game {
 
     this.rules.prepare();
 
-    new PainterEngine(this.rules);
+    new Engine({
+      updateState: this.rules.updateState.bind(this.rules),
+      rules: this.rules,
+    });
   }
 
   get nextPlayer(): Player {

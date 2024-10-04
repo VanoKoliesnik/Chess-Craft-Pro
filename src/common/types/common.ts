@@ -24,3 +24,5 @@ export type EntitySearchArgsByMultipleCoordinates = {
 export type EntitySearchArgs = Partial<
   EntitySearchArgsById & EntitySearchArgsByCoordinates
 >;
+
+export type VoidFunction = () => void;

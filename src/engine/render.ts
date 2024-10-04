@@ -3,17 +3,14 @@ export class RenderEngine {
   private prevFrame: string = null;
 
   private readonly renderFrame: () => string;
-  private readonly updateState: () => void;
 
-  constructor(updateState: () => void, renderFrame: () => string) {
+  constructor(renderFrame: () => string) {
     this.renderFrame = renderFrame;
-    this.updateState = updateState;
     this.start();
   }
 
-  start(fps: number = 6) {
+  start(fps: number = 2) {
     this.intervalId = setInterval(() => {
-      this.updateState();
       const nextFrame = this.renderFrame();
 
       if (this.prevFrame === nextFrame) {

@@ -3,10 +3,14 @@ import { CellType } from "@common/enums";
 import { Cell, Holocron } from "@entities";
 import { Rules } from "@rules";
 
+type DebugConfig = {
+  rules: Rules;
+};
+
 export class DebugEngine {
   private readonly rules: Rules;
 
-  constructor(rules: Rules) {
+  constructor({ rules }: DebugConfig) {
     this.rules = rules;
   }
 

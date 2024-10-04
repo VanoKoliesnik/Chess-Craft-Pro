@@ -21,4 +21,9 @@ export enum EventName {
    * @argument cell: Cell
    */
   SetFigureOnCell = "SetFigureOnCell",
+
+  /**
+   * @argument winner: Player
+   */
+  GameFinished = "GameFinished",
 }

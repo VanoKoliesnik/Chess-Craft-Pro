@@ -1,6 +1,16 @@
 import { BOARD_COLUMN_NAMES, BOARD_ROW_NAMES } from "@common/constants";
-import { Coordinates } from "@common/shared";
-import { CoordinatesKey, CoordinatesSet, ICoordinate } from "@common/types";
+import {
+  AppEventEmitter,
+  Coordinates,
+  EventEmitter,
+  EventName,
+} from "@common/shared";
+import {
+  CoordinatesKey,
+  CoordinatesSet,
+  ICoordinate,
+  WinConditionsResult,
+} from "@common/types";
 
 import { Cell, Holocron, Player } from "@entities";
 
@@ -8,14 +18,33 @@ export abstract class Rules {
   abstract readonly name: string;
 
   abstract prepare(): void;
-  abstract nextMove(): void;
+  protected abstract nextMove(): void;
 
   abstract spawnPlayers(): void;
   abstract spawnFigures(players: Player[]): void;
   abstract getCellAvailableMoves(cell: Cell): ICoordinate[];
   abstract checkIfCanAcceptFigure(cell: Cell): boolean;
+  abstract checkWinningConditions(): WinConditionsResult;
+  abstract drawStatistics(): string;
 
-  constructor() {}
+  protected readonly eventEmitter: EventEmitter;
+
+  protected winner: Player;
+
+  constructor() {
+    this.eventEmitter = AppEventEmitter.getInstance();
+  }
+
+  updateState() {
+    this.nextMove();
+
+    const winningResultCheck = this.checkWinningConditions();
+
+    if (winningResultCheck.hasSomeoneWon) {
+      this.winner = winningResultCheck.player;
+      this.finishGame();
+    }
+  }
 
   isMoveAvailable(cell: Cell, destinationCoordinates: ICoordinate): boolean {
     return this.getCellAvailableMovesSet(cell).has(
@@ -56,5 +85,9 @@ export abstract class Rules {
 
   getRowsNames(): string[] {
     return BOARD_ROW_NAMES;
+  }
+
+  finishGame() {
+    this.eventEmitter.emit(EventName.GameFinished, this.winner);
   }
 }
